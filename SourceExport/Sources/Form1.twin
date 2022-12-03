@@ -1,0 +1,192 @@
+[ FormDesignerId ("A32223BF-763A-42FC-BBE4-83701F35D3FB") ]
+[ PredeclaredId ]
+Class Form1
+    Attribute VB_Name = "Form1"
+    Attribute VB_GlobalNameSpace = False
+    Attribute VB_Creatable = False
+    Attribute VB_PredeclaredId = True
+    Attribute VB_Exposed = False
+    Option Explicit
+    Private Const BCM_FIRST = &H1600
+    Private Const BCM_SETSHIELD = (BCM_FIRST + &HC)
+    Private Const SB_BOTTOM = 7
+    Private Const EM_SCROLL As Integer = &HB5
+    Private Declare PtrSafe Function SendMessage Lib "user32" Alias "SendMessageA" (ByVal hWnd As LongPtr, ByVal wMsg As Long, ByVal wParam As LongPtr, lParam As Any) As LongPtr
+    Private Declare PtrSafe Function IsUserAnAdmin Lib "shell32" () As Long
+    Private sRunStr As String
+    
+    Private Sub Command1_Click()
+    Dim lRet As Long
+    Dim pp As Long
+    Select Case Combo1.ListIndex
+    
+        Case 0: pp = IDLE_PRIORITY_CLASS
+        Case 1: pp = BELOW_NORMAL_PRIORITY_CLASS
+        Case 2: pp = NORMAL_PRIORITY_CLASS
+        Case 3: pp = ABOVE_NORMAL_PRIORITY_CLASS
+        Case 4: pp = HIGH_PRIORITY_CLASS
+        Case 5: pp = REALTIME_PRIORITY_CLASS
+    End Select
+    sRunStr = Combo2.Text
+    lRet = LaunchAsTI(sRunStr, pp)
+    AddMRUW sRunStr, "Run"
+    RefreshCombo
+    If lRet Then
+        AppendLog "LaunchAsTI return code=0x" & Hex$(lRet) & " (SUCCESS)"
+    Else
+        AppendLog "LaunchAsTI return code=0x" & Hex$(lRet) & " (FAIL)"
+    End If
+    
+    End Sub
+    Private Sub RefreshCombo()
+    Dim i As Long
+    For i = Combo2.ListCount - 1 To 0 Step -1
+        Combo2.RemoveItem i
+    Next i
+    LoadMRU
+    End Sub
+    
+    Private Sub Command3_Click()
+    Dim sFldr As String
+    sFldr = PickFile()
+    If sFldr <> "" Then
+        Combo2.Text = sFldr
+    End If
+    End Sub
+    
+    Private Sub Form_Load()
+    Combo1.AddItem "Idle"
+    Combo1.AddItem "Below normal"
+    Combo1.AddItem "Normal"
+    Combo1.AddItem "Above normal"
+    Combo1.AddItem "High"
+    Combo1.AddItem "Realtime"
+    Combo1.ListIndex = 2
+    If IsUserAnAdmin() Then
+        Command1.Enabled = True
+        SendMessage Command1.hWnd, BCM_SETSHIELD, 0&, ByVal 1&
+        AppendLog "Waiting..."
+    Else
+        Combo1.Enabled = False
+        Combo2.Enabled = False
+        Label2.Visible = True
+        AppendLog "Please exit and restart with 'Run As Administrator'"
+    End If
+    LoadMRU
+    End Sub
+    Private Sub LoadMRU()
+    Dim szRegVal As String
+    Dim i As Long
+    For i = 0 To 20
+        szRegVal = GetSetting(App.Title, "MRU", "Run" & i, "")
+        If szRegVal <> "" Then
+            Combo2.AddItem szRegVal
+        End If
+    Next i
+    End Sub
+    Public Sub AppendLog(smsg As String)
+    Text2.Text = Text2.Text & smsg & vbCrLf
+    SendMessage Text2.hWnd, EM_SCROLL, SB_BOTTOM, ByVal 0&
+    End Sub
+    
+    Private Sub Form_Unload(Cancel As Integer)
+    ReleaseToken
+    #If Win64 = 0 Then
+    Wow64RevertWow64FsRedirection lOld64
+    #End If
+    End Sub
+    
+    Private Function LPWSTRtoStr(lPtr As LongPtr, Optional ByVal fFree As Boolean = True) As String
+    SysReAllocStringW VarPtr(LPWSTRtoStr), lPtr
+    If fFree Then
+        Call CoTaskMemFree(lPtr)
+    End If
+    End Function
+    
+    Private Function PickFile() As String
+        Dim fod As FileOpenDialog
+        Set fod = New FileOpenDialog
+        Dim lpAbsPath As LongPtr
+        Dim lpPath As LongPtr
+        Dim siRes As IShellItem
+        Dim tFilt() As COMDLG_FILTERSPEC
+        ReDim tFilt(1)
+        tFilt(0).pszName = StrPtr("Programs")
+        tFilt(0).pszSpec = StrPtr("*.exe; *.com; *.bat")
+        tFilt(1).pszName = StrPtr("All Files")
+        tFilt(1).pszSpec = StrPtr("*.*")
+        With fod
+            .SetTitle "Pick folder"
+            .SetOptions FOS_PATHMUSTEXIST
+            .SetFileTypes 2, VarPtr(tFilt(0))
+            On Error Resume Next
+            .Show Me.hWnd
+            .GetResult siRes
+            On Error GoTo 0
+            If (siRes Is Nothing) = False Then
+                'siRes.GetDisplayName SIGDN_DESKTOPABSOLUTEPARSING, lpAbsPath
+                siRes.GetDisplayName SIGDN_FILESYSPATH, lpPath
+                PickFile = LPWSTRtoStr(lpPath)
+                If InStr(PickFile, " ") Then
+                    PickFile = Chr$(34) & PickFile & Chr$(34)
+                End If
+                    
+            End If
+            
+        End With
+    End Function
+    
+    Public Sub AddMRUW(sEntry As String, sCat As String, Optional lLim As Long = 20)
+    'adds an entry to the MRU for sCat category
+    'Filter1 is always the most recent, so entries must be downshifted and 5 deleted
+    'lLim specifies the maximum number of MRU entries for a category, default is 10
+    Dim sRegOld() As String
+    Dim sRegNew() As String
+    Dim sHold As String
+    Dim lExists As Long
+    lExists = -1
+    
+    ReDim sRegOld(lLim - 1)
+    ReDim sRegNew(lLim - 1)
+    Debug.Print "AddMRUW " & sEntry & ", sCat=" & sCat, 3
+    Dim i As Long, j As Long, k As Long
+    For i = 0 To (lLim - 1)
+        'sRegOld(i) = GetSettingW(App.Title & "\MRU", sCat & i + 1) 'TODO: FIX THIS POS
+        sRegOld(i) = GetSetting(App.Title, "\MRU", sCat & i + 1)
+        'DebugAppend "compare [" & sRegOld(i) & "][" & sEntry & "]", 2
+        If sRegOld(i) = sEntry Then
+            lExists = i
+        End If
+    Next i
+    'construct the new list
+    If lExists > -1 Then
+        Debug.Print "AddMRUW->lExists=" & lExists
+        'the entry already exists, so bump it to 1 then add the rest of the entries
+        sRegNew(0) = sEntry
+        k = 0
+        For i = 0 To (lLim - 1) 'scan through all the values but skip what was just added to 0
+            If lExists <> (i) Then
+                k = k + 1
+                sRegNew(k) = sRegOld(i)
+            End If
+        Next i
+    Else
+        Debug.Print "AddMRUw->lExists=-1"
+        sRegNew(0) = sEntry
+        For i = 0 To (lLim - 2) 'the old 10th entry is dropped
+            sRegNew(i + 1) = sRegOld(i)
+        Next i
+    End If
+    Debug.Print Join(sRegNew, ",")
+    For i = 0 To (lLim - 1)
+        If sRegNew(i) <> "" Then
+            SaveSetting App.Title, "\MRU", sCat & i + 1, sRegNew(i)
+        End If
+    Next i
+            
+    
+        
+    End Sub
+    
+
+End Class

@@ -1,0 +1,67 @@
+{
+	"configuration.inherits": "Defaults",
+	"project.appHelpFile": "",
+	"project.appTitle": "RunAsTI64",
+	"project.autoPrettify": true,
+	"project.buildPath": "${SourcePath}\\Build\\${Architecture}\\${ProjectName}.${FileExtension}",
+	"project.buildType": "Standard EXE",
+	"project.description": "Start a program with full system privileges.",
+	"project.exportPathIsV2": true,
+	"project.forceDpiAwarenessAtStartup": "NONE",
+	"project.id": "{5DEAD93E-1769-4E20-A807-FDA908EF151A}",
+	"project.name": "RunAsTI64",
+	"project.optionExplicit": false,
+	"project.references": [
+		{
+			"id": "{F50B82D0-DCAB-43FE-9631-11959D4A4728}",
+			"isCompilerPackage": true,
+			"lcid": 0,
+			"licence": "MIT",
+			"name": "[COMPILER PACKAGE] WinNativeForms Package",
+			"path32": "",
+			"path64": "",
+			"publisher": "TWINBASIC-COMPILER",
+			"versionBuild": 0,
+			"versionMajor": 0,
+			"versionMinor": 0,
+			"versionRevision": 31
+		},
+		{
+			"id": "{00020430-0000-0000-C000-000000000046}",
+			"lcid": 0,
+			"name": "OLE Automation",
+			"path32": "..\\..\\Windows\\SysWOW64\\stdole2.tlb",
+			"path64": "..\\..\\Windows\\SysWOW64\\stdole2.tlb",
+			"versionMajor": 2,
+			"versionMinor": 0
+		},
+		{
+			"id": "{1FCDB98D-617D-4995-9736-2ED0E4746A10}",
+			"licence": "MIT",
+			"name": "[IMPORTED] twinBASIC Shell Library v2.3.29",
+			"path32": "/Packages/tbShellLib",
+			"path64": "/Packages/tbShellLib",
+			"publishedDate": "15-NOV-2022",
+			"publishedTime": "08:40:57",
+			"publisher": "fafalone",
+			"symbolId": "tbShellLib",
+			"versionBuild": "0",
+			"versionMajor": "2",
+			"versionMinor": "3",
+			"versionRevision": "29"
+		}
+	],
+	"project.startupObject": "Sub Main",
+	"project.versionAutoIncrement": "Revision",
+	"project.versionCompanyName": "Fafalonian Productions",
+	"project.versionFileDescription": "Run as ACTUAL administrator (SYSTEM)",
+	"project.versionLegalCopyright": "(c) 2022 Jon Johnson",
+	"project.versionMajor": 2,
+	"project.versionMinor": 2,
+	"project.versionRevision": 62,
+	"project.warnings": {
+		"errors": [],
+		"ignored": []
+	},
+	"runtime.useUnicodeStandardLibrary": true
+,"project.versionBuild":0}
