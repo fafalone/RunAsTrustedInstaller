@@ -21,3 +21,11 @@ Important: You must use Run As Administrator to use this code; it simply allows 
 ### Usage
 
 Arguments are supported. Paths containing spaces must be enclosed in quotes.
+
+### Thanks
+
+This project was based on Norbert Federa's [run-as-trustedinstaller](https://github.com/nfedera/run-as-trustedinstaller) and APTortellini's [unDefender](https://github.com/APTortellini/unDefender).
+
+SetPrivilege function borrowed from Nayan Patel at BinaryWorld's code [found here](https://binaryworld.net/main/CodeDetail.aspx?CodeId=3744). Some declares from DavidUK's [Viewing Token Privileges CodeBank project](https://www.vbforums.com/showthread.php?863511-Viewing-Token-Privileges).
+
+Background: [The Art of Becoming TrustedInstaller](https://www.tiraniddo.dev/2017/08/the-art-of-becoming-trustedinstaller.html). 
