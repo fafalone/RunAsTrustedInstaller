@@ -5,7 +5,7 @@ Option Explicit
 
 '************************************************************************
 'modRunAsTI - Run As TrustedInstaller
-'Version: 2.2 (May 31 2022) :: twinBASIC x64 Port (Dec 03 2022)
+'Version: 2.3 (Dec 03 2022) :: twinBASIC x64 Port (Dec 03 2022)
 'Author: Jon Johnson (fafalone)   (see project thread for full credits)
 'Project thread: https://www.vbforums.com/showthread.php?895287
 '
@@ -42,6 +42,12 @@ Option Explicit
 '               call this, the initialization procedure will run again
 '               the next time LaunchAsTI is called.
 '
+'Version 2.3 Changes
+'
+'-twinBASIC version: 
+'   -Path entry now supports Unicode
+'   -TextBox replaced with ComboBox using MRU list
+'   -File picker added to browse for program
 '
 'Version 2.2 changes:
 '
