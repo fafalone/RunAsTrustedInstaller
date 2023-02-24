@@ -5,7 +5,7 @@ Option Explicit
 
 '************************************************************************
 'modRunAsTI - Run As TrustedInstaller
-'Version: 2.3 (Dec 03 2022) :: twinBASIC x64 Port (Dec 03 2022)
+'Version: 2.3.1 (24 Feb 2023) :: twinBASIC x64 Port (Dec 03 2022)
 'Author: Jon Johnson (fafalone)   (see project thread for full credits)
 'Project thread: https://www.vbforums.com/showthread.php?895287
 '
@@ -41,6 +41,17 @@ Option Explicit
 'ReleaseToken - Calls CloseHandle on the TrustedInstaller token. If you
 '               call this, the initialization procedure will run again
 '               the next time LaunchAsTI is called.
+'
+'
+'Version 2.3.1
+'-Bug fix: ABOVE_NORMAL_PRIORITY_CLASS may not have worked due to sign error in 
+'          hexadecimal literal. Also updated tbShellLib version to one without
+'          such errors.
+'
+'Version 2.3a Changes:
+'-Bug fix: SECURITY_QUALITY_OF_SERVICE.Length was set to Len() instead of LenB(); 
+'          this didn't generate any errors at the time but it's incorrect so may
+'          change with future versions of Windows.
 '
 'Version 2.3 Changes
 '
@@ -133,7 +144,7 @@ Private Const STANDARD_RIGHTS_READ As Long = READ_CONTROL
 Private Const STANDARD_RIGHTS_WRITE As Long = READ_CONTROL
 Private Const STANDARD_RIGHTS_EXECUTE As Long = READ_CONTROL
 Private Const STANDARD_RIGHTS_ALL As Long = &H1F0000
-Private Const SPECIFIC_RIGHTS_ALL As Long = &HFFFF
+Private Const SPECIFIC_RIGHTS_ALL As Long = &HFFFF&
 
 Private Const TOKEN_ASSIGN_PRIMARY As Long = &H1
 Private Const TOKEN_DUPLICATE As Long = &H2
@@ -146,7 +157,7 @@ Private Const TOKEN_ADJUST_DEFAULT As Long = &H80
 Private Const TOKEN_ADJUST_SESSIONID As Long = &H100
 Private Const TOKEN_ALL_ACCESS = (STANDARD_RIGHTS_REQUIRED Or TOKEN_ASSIGN_PRIMARY Or TOKEN_DUPLICATE Or TOKEN_IMPERSONATE Or TOKEN_QUERY Or TOKEN_QUERY_SOURCE Or TOKEN_ADJUST_PRIVILEGES Or TOKEN_ADJUST_GROUPS Or TOKEN_ADJUST_DEFAULT)
 
-Private Const THREAD_DIRECT_IMPERSONATION = (&H200)
+Private Const THREAD_DIRECT_IMPERSONATION = &H200
 Private Const ERROR_SERVICE_ALREADY_RUNNING = &H420
 Private Const S_OK = 0&
 Public Const MAX_PATH = 260&
@@ -176,7 +187,7 @@ Public Enum PriorityClass
     HIGH_PRIORITY_CLASS = &H80
     REALTIME_PRIORITY_CLASS = &H100
     BELOW_NORMAL_PRIORITY_CLASS = &H4000
-    ABOVE_NORMAL_PRIORITY_CLASS = &H8000
+    ABOVE_NORMAL_PRIORITY_CLASS = &H8000&
     PROCESS_MODE_BACKGROUND_BEGIN = &H100000
     PROCESS_MODE_BACKGROUND_END = &H200000
 End Enum
@@ -250,7 +261,7 @@ Private Enum STARTUP_FLAGS
     STARTF_TITLEISLINKNAME = &H800
     STARTF_TITLEISAPPID = &H1000
     STARTF_PREVENTPINNING = &H2000
-    STARTF_UNTRUSTEDSOURCE = &H8000
+    STARTF_UNTRUSTEDSOURCE = &H8000&
 End Enum
 Private Type STARTUPINFOW
    cbSize As Long
@@ -454,6 +465,7 @@ If Command() <> "" Then
     #If Win64 = 0 Then
     Wow64RevertWow64FsRedirection lOld64
     #End If
+    ReleaseToken
 Else
     bUI = True
     Form1.Show
@@ -585,7 +597,6 @@ End Sub
 Private Function ImpersonateSystem() As Boolean
 Dim lRet As Long
 Dim lastErr As Long
-Dim hDupToken As LongPtr
 Dim hSysTkn As LongPtr
 
 Dim hWinLogon As LongPtr
@@ -610,7 +621,6 @@ If pidWinLogon Then
             Else
                 PostLog "Failed to impersonate system. lastErr=" & GetErrorName(lastErr) & " (0x" & Hex$(lastErr) & ")"
             End If
-            CloseHandle hDupToken
             CloseHandle hSysTkn
         Else
             PostLog "Failed to open winlogon process token. lastErr=" & GetErrorName(lastErr) & " (0x" & Hex$(lastErr) & ")"
@@ -672,7 +682,7 @@ Dim hSnapshot As LongPtr
 Dim hr As Long
 hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0&)
 If hSnapshot Then
-    te32.dwSize = Len(te32)
+    te32.dwSize = LenB(te32)
     hr = Thread32First(hSnapshot, te32)
     Do
         If te32.th32OwnerProcessID = pid Then
@@ -712,7 +722,7 @@ If hSvc Then
     PostLog "Attempting to start TrustedInstaller service..."
     Dim tStatus As SERVICE_STATUS_PROCESS
     Dim dwBytes As Long
-    Do While QueryServiceStatusEx(hSvc, SC_STATUS_PROCESS_INFO, tStatus, Len(tStatus), dwBytes)
+    Do While QueryServiceStatusEx(hSvc, SC_STATUS_PROCESS_INFO, tStatus, LenB(tStatus), dwBytes)
         If tStatus.dwCurrentState = SERVICE_STOPPED Then
             lastErr = 0&
             PostLog "Service currently stopped, starting..."
@@ -745,7 +755,7 @@ If hSvc Then
             lastErr = Err.LastDllError
             If hThread Then
                 Dim sqos As SECURITY_QUALITY_OF_SERVICE
-                sqos.Length = Len(sqos)
+                sqos.Length = LenB(sqos)
                 sqos.ImpersonationLevel = SecurityImpersonation
                 status = NtImpersonateThread(GetCurrentThread(), hThread, sqos)
                 If status = STATUS_SUCCESS Then
@@ -807,7 +817,7 @@ With tTP
   End If
 End With
 
-lRet = AdjustTokenPrivileges(hToken, False, tTP, Len(tTP_Prev), tTP_Prev, lngReturnLength)
+lRet = AdjustTokenPrivileges(hToken, False, tTP, LenB(tTP_Prev), tTP_Prev, lngReturnLength)
 lastErr = Err.LastDllError
 If lastErr = 0 Then
   SetPrivilege = True

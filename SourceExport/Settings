@@ -1,6 +1,5 @@
 {
 	"configuration.inherits": "Defaults",
-	"project.appHelpFile": "",
 	"project.appTitle": "RunAsTI64",
 	"project.autoPrettify": true,
 	"project.buildPath": "${SourcePath}\\Build\\${Architecture}\\${ProjectName}.${FileExtension}",
@@ -13,6 +12,7 @@
 	"project.optionExplicit": false,
 	"project.references": [
 		{
+			"hasBeenSplit": true,
 			"id": "{F50B82D0-DCAB-43FE-9631-11959D4A4728}",
 			"isCompilerPackage": true,
 			"lcid": 0,
@@ -38,30 +38,33 @@
 		{
 			"id": "{1FCDB98D-617D-4995-9736-2ED0E4746A10}",
 			"licence": "MIT",
-			"name": "[IMPORTED] twinBASIC Shell Library v2.3.29",
+			"name": "[IMPORTED] twinBASIC Shell Library v3.2.16",
 			"path32": "/Packages/tbShellLib",
 			"path64": "/Packages/tbShellLib",
-			"publishedDate": "15-NOV-2022",
-			"publishedTime": "08:40:57",
+			"publishedDate": "24-FEB-2023",
+			"publishedTime": "07:50:54",
 			"publisher": "fafalone",
 			"symbolId": "tbShellLib",
 			"versionBuild": "0",
-			"versionMajor": "2",
-			"versionMinor": "3",
-			"versionRevision": "29"
+			"versionMajor": "3",
+			"versionMinor": "2",
+			"versionRevision": "16"
 		}
 	],
+	"project.settingsVersion": 1,
 	"project.startupObject": "Sub Main",
 	"project.versionAutoIncrement": "Revision",
+	"project.versionBuild": 1,
 	"project.versionCompanyName": "Fafalonian Productions",
 	"project.versionFileDescription": "Run as ACTUAL administrator (SYSTEM)",
-	"project.versionLegalCopyright": "(c) 2022 Jon Johnson",
+	"project.versionLegalCopyright": "(c) 2023 Jon Johnson",
 	"project.versionMajor": 2,
-	"project.versionMinor": 2,
-	"project.versionRevision": 62,
+	"project.versionMinor": 3,
+	"project.versionProductName": "RunAsTI64",
+	"project.versionRevision": 58,
 	"project.warnings": {
 		"errors": [],
 		"ignored": []
 	},
 	"runtime.useUnicodeStandardLibrary": true
-,"project.versionBuild":0}
+}
