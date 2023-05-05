@@ -1,5 +1,6 @@
 {
 	"configuration.inherits": "Defaults",
+	"debugger.runtimeCommandLineArguments": "\"C:\\My folder\\myprogram\" -a -r",
 	"project.appTitle": "RunAsTI64",
 	"project.autoPrettify": true,
 	"project.buildPath": "${SourcePath}\\Build\\${Architecture}\\${ProjectName}.${FileExtension}",
@@ -38,17 +39,17 @@
 		{
 			"id": "{1FCDB98D-617D-4995-9736-2ED0E4746A10}",
 			"licence": "MIT",
-			"name": "[IMPORTED] twinBASIC Shell Library v3.2.16",
+			"name": "[IMPORTED] twinBASIC Shell Library v4.6.132",
 			"path32": "/Packages/tbShellLib",
 			"path64": "/Packages/tbShellLib",
-			"publishedDate": "24-FEB-2023",
-			"publishedTime": "07:50:54",
+			"publishedDate": "05-MAY-2023",
+			"publishedTime": "07:45:14",
 			"publisher": "fafalone",
 			"symbolId": "tbShellLib",
 			"versionBuild": "0",
-			"versionMajor": "3",
-			"versionMinor": "2",
-			"versionRevision": "16"
+			"versionMajor": "4",
+			"versionMinor": "6",
+			"versionRevision": "132"
 		}
 	],
 	"project.settingsVersion": 1,
