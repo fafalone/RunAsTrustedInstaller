@@ -19,7 +19,8 @@ This code shows you how to use the undocumented API `NtImpersonateThread` to hav
 
 Nirsoft's AdvancedRun has a feature to do this, but which sadly isn't open source much less written in VB, so I wanted to create something like it in VB6. I'll probably add more features like it has in the future, but this was the most complicated and useful.
 
-Important: You must use Run As Administrator to use this code; it simply allows an admin to be an actual admin, it cannot escalate a unprivileged normal user to administrator. It does appear to work when run from the IDE, but that will of course need to also have been run with administrator privileges. 
+> [!IMPORTANT]
+>  You must use Run As Administrator to use this code; it simply allows an admin to be an actual admin, it cannot escalate a unprivileged normal user to administrator. It does appear to work when run from the IDE, but that will of course need to also have been run with administrator privileges. 
 
 ### Usage
 
