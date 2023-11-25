@@ -22,6 +22,9 @@ Nirsoft's AdvancedRun has a feature to do this, but which sadly isn't open sourc
 > [!IMPORTANT]
 >  You must use Run As Administrator to use this code; it simply allows an admin to be an actual admin, it cannot escalate a unprivileged normal user to administrator. It does appear to work when run from the IDE, but that will of course need to also have been run with administrator privileges. 
 
+> [!CAUTION]
+> When running as SYSTEM/TrustedInstaller, it's very easy to make mistakes that can crash your computer or break your Windows installation. For instance this grants permission to kill critical system processes, which results in an immediate bluescreen. Be very careful how you use this app.
+
 ### Usage
 
 Arguments are supported. Paths containing spaces must be enclosed in quotes.
