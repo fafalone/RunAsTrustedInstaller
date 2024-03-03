@@ -420,7 +420,7 @@ Private Declare PtrSafe Function OpenServiceW Lib "advapi32.dll" (ByVal hSCManag
 Private Declare PtrSafe Function StartServiceW Lib "advapi32.dll" (ByVal hService As LongPtr, ByVal dwNumServiceArgs As Long, ByVal lpServiceArgVectors As LongPtr) As Long
 Private Declare PtrSafe Function CreateToolhelp32Snapshot Lib "kernel32" (ByVal dwFlags As TH32CS_Flags, ByVal th32ProcessID As Long) As LongPtr
 Private Declare PtrSafe Function GetCurrentThread Lib "kernel32" () As LongPtr
-Private Declare PtrSafe Function OpenThread Lib "kernel32" (ByVal dwDesiredAccess As ThreadAccess, ByVal bInheritHandle As Long, ByVal dwThreadId As Long) As LongPtr
+Private Declare PtrSafe Function OpenThread Lib "kernel32" (ByVal dwDesiredAccess As ThreadAccessRights, ByVal bInheritHandle As Long, ByVal dwThreadId As Long) As LongPtr
 Private Declare PtrSafe Function NtImpersonateThread Lib "ntdll" (ByVal hThread As LongPtr, ByVal hThreadToImpersonate As LongPtr, SecurityQualityOfService As SECURITY_QUALITY_OF_SERVICE) As Long
 Private Declare PtrSafe Function OpenThreadToken Lib "advapi32.dll" (ByVal hThread As LongPtr, ByVal dwDesiredAccess As Long, ByVal bOpenAsSelf As Long, phToken As LongPtr) As Boolean
 Private Declare PtrSafe Function GetCurrentProcess Lib "kernel32" () As LongPtr
@@ -461,7 +461,8 @@ Wow64DisableWow64FsRedirection lOld64
 If Command() <> "" Then
     Dim sFile As String
     sFile = Command()
-    LaunchAsTI sFile
+    MsgBox sFile
+    'LaunchAsTI sFile
     #If Win64 = 0 Then
     Wow64RevertWow64FsRedirection lOld64
     #End If

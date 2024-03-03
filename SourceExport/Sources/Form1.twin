@@ -117,7 +117,7 @@ Class Form1
         tFilt(1).pszSpec = StrPtr("*.*")
         With fod
             .SetTitle "Pick folder"
-            .SetOptions FOS_PATHMUSTEXIST 
+            .SetOptions FOS_PATHMUSTEXIST
             .SetFileTypes 2, VarPtr(tFilt(0))
             On Error Resume Next
             .Show Me.hWnd
