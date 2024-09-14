@@ -7,7 +7,8 @@
 
 This is a twinBASIC x64-compatible port of my original VB6 project: [[VB6] Run process as TrustedInstalled (NT AUTHORITY\SYSTEM) w/ full system privileges)](https://www.vbforums.com/showthread.php?895287-VB6-Run-process-as-TrustedInstalled-(NT-AUTHORITY-SYSTEM)-w-full-system-privileges)
 
-This version adds a couple features: tB TextBoxes support Unicode so you can now use the full UTF-16 range in the path, the plain textbox for inputting the path has been replaced with a ComboBox with MRU list, and a file picker has been added to browse for the target instead of manually typing it out (uses tbShellLib for this-- that's why the source is so large). 
+This version adds a couple features: tB TextBoxes support Unicode so you can now use the full UTF-16 range in the path, the plain textbox for inputting the path has been replaced with a ComboBox with MRU list, and a file picker has been added to browse for the target instead of manually typing it out (uses WinDevLib for this-- that's why the source is so large).\
+NOTE: The main module with the core routines is still independent with no WDL dependency.
 
 **Update (v2.3.1):** Bug fixes: Corrected bugs with ABOVE_NORMAL_PRIORITY_CLASS sign and SECURITY_ATTRIBUTES sizeof.
 
