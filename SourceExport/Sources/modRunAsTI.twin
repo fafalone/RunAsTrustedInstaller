@@ -43,7 +43,7 @@ Option Explicit
 '               the next time LaunchAsTI is called.
 '
 '
-'Version 2.3.1
+'Version 2.3.2
 '-Support priority from command line:
 '  RunAsTI /p:n path
 '  Where n is:
