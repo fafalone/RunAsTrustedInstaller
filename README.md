@@ -10,7 +10,7 @@ This is a twinBASIC x64-compatible port of my original VB6 project: [[VB6] Run p
 This version adds a couple features: tB TextBoxes support Unicode so you can now use the full UTF-16 range in the path, the plain textbox for inputting the path has been replaced with a ComboBox with MRU list, and a file picker has been added to browse for the target instead of manually typing it out (uses WinDevLib for this-- that's why the source is so large).\
 NOTE: The main module with the core routines is still independent with no WDL dependency.
 
-**Update (v2.3.2):** Support optional priority argument from command line; fix command line.
+**Update (v2.3.2, 16 Apr 2025):** Support optional priority argument from command line; fix command line.
 ```
 '  RunAsTI64.exe /p:n path
 '  Where n is:
