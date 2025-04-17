@@ -5,7 +5,7 @@ Option Explicit
 
 '************************************************************************
 'modRunAsTI - Run As TrustedInstaller
-'Version: 2.3.1 (24 Feb 2023) :: twinBASIC x64 Port (Dec 03 2022)
+'Version: 2.3.2 (16 Apr 2025) :: twinBASIC x64 Port (Dec 03 2022)
 'Author: Jon Johnson (fafalone)   (see project thread for full credits)
 'Project thread: https://www.vbforums.com/showthread.php?895287
 '
@@ -41,6 +41,22 @@ Option Explicit
 'ReleaseToken - Calls CloseHandle on the TrustedInstaller token. If you
 '               call this, the initialization procedure will run again
 '               the next time LaunchAsTI is called.
+'
+'
+'Version 2.3.1
+'-Support priority from command line:
+'  RunAsTI /p:n path
+'  Where n is:
+'  1 - NORMAL_PRIORITY_CLASS
+'  2 - IDLE_PRIORITY_CLASS
+'  3 - HIGH_PRIORITY_CLASS
+'  4 - REALTIME_PRIORITY_CLASS
+'  5 - BELOW_NORMAL_PRIORITY_CLASS
+'  6 - ABOVE_NORMAL_PRIORITY_CLASS
+' So for example,
+' RunAsTI.exe /p:3 C:\path\to\file.exe
+'
+'-Bug fix: Command line nonfunctional
 '
 '
 'Version 2.3.1
@@ -156,8 +172,7 @@ Private Const TOKEN_ADJUST_GROUPS As Long = &H40
 Private Const TOKEN_ADJUST_DEFAULT As Long = &H80
 Private Const TOKEN_ADJUST_SESSIONID As Long = &H100
 Private Const TOKEN_ALL_ACCESS = (STANDARD_RIGHTS_REQUIRED Or TOKEN_ASSIGN_PRIMARY Or TOKEN_DUPLICATE Or TOKEN_IMPERSONATE Or TOKEN_QUERY Or TOKEN_QUERY_SOURCE Or TOKEN_ADJUST_PRIVILEGES Or TOKEN_ADJUST_GROUPS Or TOKEN_ADJUST_DEFAULT)
-
-Private Const THREAD_DIRECT_IMPERSONATION = &H200
+ 
 Private Const ERROR_SERVICE_ALREADY_RUNNING = &H420
 Private Const S_OK = 0&
 Public Const MAX_PATH = 260&
@@ -375,6 +390,22 @@ Private Enum SECURITY_IMPERSONATION_LEVEL
     SecurityDelegation = 3
 End Enum
 
+Private Enum ThreadAccessRights
+    THREAD_TERMINATE = &H1
+    THREAD_SUSPEND_RESUME = &H2
+    THREAD_GET_CONTEXT = &H8
+    THREAD_SET_CONTEXT = &H10
+    THREAD_SET_INFORMATION = &H20
+    THREAD_QUERY_INFORMATION = &H40
+    THREAD_SET_THREAD_TOKEN = &H80
+    THREAD_IMPERSONATE = &H100
+    THREAD_DIRECT_IMPERSONATION = &H200
+    THREAD_SET_LIMITED_INFORMATION = &H400
+    THREAD_QUERY_LIMITED_INFORMATION = &H800
+    THREAD_RESUME = &H1000
+    THREAD_ALL_ACCESS = (STANDARD_RIGHTS_REQUIRED Or SYNCHRONIZE Or &HFFFF&)
+End Enum
+
 Private Enum TH32CS_Flags
     TH32CS_SNAPHEAPLIST = &H1
     TH32CS_SNAPPROCESS = &H2
@@ -458,11 +489,25 @@ Sub Main()
 #If Win64 = 0 Then
 Wow64DisableWow64FsRedirection lOld64
 #End If
-If Command() <> "" Then
+If Command$() <> "" Then
     Dim sFile As String
-    sFile = Command()
-    MsgBox sFile
-    'LaunchAsTI sFile
+    Dim sCmd As String
+    Dim nPriority As Long = NORMAL_PRIORITY_CLASS
+    Dim sPr As String
+    sCmd = Command$()
+    If LCase$(Left$(sCmd, 3)) = "/p:" Then
+        sPr = Mid$(sCmd, 4, 1)
+        If sPr = "1" Then nPriority = NORMAL_PRIORITY_CLASS
+        If sPr = "2" Then nPriority = IDLE_PRIORITY_CLASS
+        If sPr = "3" Then nPriority = HIGH_PRIORITY_CLASS
+        If sPr = "4" Then nPriority = REALTIME_PRIORITY_CLASS
+        If sPr = "5" Then nPriority = BELOW_NORMAL_PRIORITY_CLASS
+        If sPr = "6" Then nPriority = ABOVE_NORMAL_PRIORITY_CLASS
+        sFile = Mid$(sCmd, 6)
+    Else
+        sFile = sCmd
+    End If
+    LaunchAsTI sFile, nPriority
     #If Win64 = 0 Then
     Wow64RevertWow64FsRedirection lOld64
     #End If

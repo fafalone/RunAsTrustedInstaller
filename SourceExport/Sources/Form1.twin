@@ -1,5 +1,5 @@
-[ FormDesignerId ("A32223BF-763A-42FC-BBE4-83701F35D3FB") ]
-[ PredeclaredId ]
+[FormDesignerId("A32223BF-763A-42FC-BBE4-83701F35D3FB")]
+[PredeclaredId]
 Class Form1
     Attribute VB_Name = "Form1"
     Attribute VB_GlobalNameSpace = False

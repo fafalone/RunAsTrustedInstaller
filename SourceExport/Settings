@@ -39,37 +39,39 @@
 			"versionMinor": 0
 		},
 		{
+			"autoCtlExt": true,
 			"id": "{1FCDB98D-617D-4995-9736-2ED0E4746A10}",
 			"licence": "CC0 1.0 Universal",
-			"name": "[IMPORTED] Windows Development Library for twinBASIC v7.6.325",
+			"name": "[IMPORTED] Windows Development Library for twinBASIC v8.8.516",
 			"path32": "/Packages/WinDevLib",
 			"path64": "/Packages/WinDevLib",
-			"publishedDate": "29-FEB-2024",
-			"publishedTime": "17:58:56",
+			"publishedDate": "15-APR-2025",
+			"publishedTime": "07:33:52",
 			"publisher": "fafalone",
 			"symbolId": "WinDevLib",
-			"versionBuild": "325",
-			"versionMajor": "7",
-			"versionMinor": "6",
+			"versionBuild": "516",
+			"versionMajor": "8",
+			"versionMinor": "8",
 			"versionRevision": "0"
 		}
 	],
 	"project.settingsVersion": 1,
 	"project.startupObject": "Sub Main",
-	"project.versionAutoIncrement": "Revision",
-	"project.versionBuild": 1,
+	"project.versionAutoIncrement": "None",
+	"project.versionBuild": 2,
 	"project.versionCompanyName": "Fafalonian Productions",
 	"project.versionFileDescription": "Run as ACTUAL administrator (SYSTEM)",
 	"project.versionLegalCopyright": "(c) 2023 Jon Johnson",
 	"project.versionMajor": 2,
 	"project.versionMinor": 3,
 	"project.versionProductName": "RunAsTI64",
-	"project.versionRevision": 58,
+	"project.versionRevision": 60,
 	"project.warnings": {
 		"errors": [],
 		"hints": [],
 		"ignored": [],
-		"info": []
+		"info": [],
+		"warnings": []
 	},
 	"runtime.useUnicodeStandardLibrary": true
 }
