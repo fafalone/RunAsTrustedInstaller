@@ -1,4 +1,4 @@
-# RunAsTrustedInstaller v2.3.1
+# RunAsTrustedInstaller v2.3.2
 <p align=center>
 <img src=https://i.imgur.com/lTrx8hY.jpg>Screenshot</img>
 </p>
@@ -9,6 +9,22 @@ This is a twinBASIC x64-compatible port of my original VB6 project: [[VB6] Run p
 
 This version adds a couple features: tB TextBoxes support Unicode so you can now use the full UTF-16 range in the path, the plain textbox for inputting the path has been replaced with a ComboBox with MRU list, and a file picker has been added to browse for the target instead of manually typing it out (uses WinDevLib for this-- that's why the source is so large).\
 NOTE: The main module with the core routines is still independent with no WDL dependency.
+
+**Update (v2.3.2):** Support optional priority argument from command line; fix command line.
+```
+'  RunAsTI64.exe /p:n path
+'  Where n is:
+'  1 - NORMAL_PRIORITY_CLASS
+'  2 - IDLE_PRIORITY_CLASS
+'  3 - HIGH_PRIORITY_CLASS
+'  4 - REALTIME_PRIORITY_CLASS
+'  5 - BELOW_NORMAL_PRIORITY_CLASS
+'  6 - ABOVE_NORMAL_PRIORITY_CLASS
+' So for example,
+' RunAsTI64.exe /p:3 C:\path\to\file.exe
+' This is optional; if omitted, process is run at NORMAL_PRIORITY_CLASS.
+' Standard command line still supported, e.g. RunAsTI64.exe C:\path\to\file.exe
+```
 
 **Update (v2.3.1):** Bug fixes: Corrected bugs with ABOVE_NORMAL_PRIORITY_CLASS sign and SECURITY_ATTRIBUTES sizeof.
 
